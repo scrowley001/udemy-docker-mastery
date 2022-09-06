@@ -23,8 +23,8 @@ To run a Ubuntu machine and then be able to exec onto it, run this:
 
 `docker container run -d --name ubuntu-vol-test -it -v pg_vol:/var/log/test ubuntu bash`
 
-1.Notice the volume section. Previously this volume was attached to another postgres container.
-2.Inside the Postgres container at /var/logs/pg I created a file called test and put some text in there. 
-3.I stopped the container and reattached the volume to the Ubuntu container at a different location and the file was still there with the text inside. 
-4.So when you create a volume first and places files in there, the files inside that location are what is saved to the volume. 
-5.So if you run the -v with the same named volume on a new container, the file location can be different, but all the files inside will be the same.
+1. Notice the volume section. Previously this volume was attached to another postgres container.
+2. Inside the Postgres container at /var/logs/pg I created a file called test and put some text in there. 
+3. I stopped the container and reattached the volume to the Ubuntu container at a different location and the file was still there with the text inside. 
+4. So when you create a volume first and places files in there, the files inside that location are what is saved to the volume. 
+5. So if you run the -v with the same named volume on a new container, the file location can be different, but all the files inside will be the same.
