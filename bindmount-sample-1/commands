@@ -1,0 +1,1 @@
+docker run -d -p 80:4000 -v /home/scrowley/Training/Docker/udemy-docker-mastery/bindmount-sample-1:/site bretfisher/jekyll-serve
