@@ -11,14 +11,16 @@ The will start up a new alpine container on the new_network, run nslookup on the
 command -- docker container run --rm --net new_network alpine nslookup search
 
 If you are running an alternate command other than the default command, and its not a shell, you then don't need to provide the '-it' flag e.g.
-command -- docker container run -it --network new_network centos:7 ping google.com
+`docker container run -it --network new_network centos:7 ping google.com`
 OR
-command -- docker container run --network new_network centos:7 ping google.com
+`docker container run --network new_network centos:7 ping google.com`
 
-docker image build -t custom-nginx .
-docker container run -d --name custom --rm -P custom-nginx
+`docker image build -t custom-nginx .`
 
-To run a Ubuntu machine and then be able to exec onto it, run this
+`docker container run -d --name custom --rm -P custom-nginx`
+
+To run a Ubuntu machine and then be able to exec onto it, run this: 
+
 `docker container run -d --name ubuntu-vol-test -it -v pg_vol:/var/log/test ubuntu bash`
 
 1.Notice the volume section. Previously this volume was attached to another postgres container.
