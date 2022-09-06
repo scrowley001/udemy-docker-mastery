@@ -10,9 +10,11 @@ services:
     build:
       context: .
       dockerfile: nginx.Dockerfile
+    image: nginx-custom
     ports:
-      - '80:80'
+      - '8090:80'
   web:
     image: httpd
     volumes:
+      # This is a bind mounting as it starts with a '/'. So any change to the files in there will be reflected inside the running container on localhost
       - ./html:/usr/local/apache2/htdocs/
