@@ -1,0 +1,11 @@
+FLOW from running a command:
+kubectl command actaully reaches to  kube-api server. API-server authenticates the request and validates it. Retrieves data from etcd cluster and returns the requested info (kubectl get nodes - returns data)
+
+If you run a kubectl create pod. The api-server creates a pod but doesn't assign it to a node, updates etcd, then updates user that the pod has been created
+
+Scheduler is constantly monitoring the api-server and realises there is a new pod and with no assigned node. Scheduler identifies the right node to place the pod and tells the api-server. Api-server then again updates etcd
+
+APIserver then passes the info to kubelet on the node. The kubelet creates the pod on the nodes and tells the runtime engine to deploy the application image. The kubelet then updates the status back to the apiserver and the apiserver then updates the data again in the etcd cluster
+
+
+apiserver is the only thing that interacts with etcd; everything else communicates with the apiserver

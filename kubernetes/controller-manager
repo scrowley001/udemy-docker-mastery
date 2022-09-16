@@ -1,0 +1,13 @@
+A controller is a process that monitors the state of various components within the system and works to bring the whole system to the desired state
+
+node-controller monitors the status of the nodes. Checks nodes every 5s. If it stops receiving a pulse from a node after 40s, then it marks the node as unreachable. After this, it gives it 5m to come back up and if it doesn't then it removes the pods and reassignes them to healthy ones if they are part of a replicaset
+
+replication-controller - montitors replicasets and insures the desired number of pods are always running within the set. Creates new pods if one dies
+
+namespace-controller
+deployment-controller
+job-controller and many other
+
+all of these concepts (deployments, replicasets etc) are all implemented via a controller
+
+all of these are packaged into a single controller called 'kube-controller-manager'
