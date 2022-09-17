@@ -2,8 +2,7 @@ version: '3'
 
 services:
   drupal:
-    build:
-      context: .
+    build: .
     image: custom-drupal
     ports:
       - 9001:80
