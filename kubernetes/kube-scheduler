@@ -1,0 +1,8 @@
+The sheduler is only responsible for deciding which pod goes on which node. The kubelet on the node actually creates the pod
+
+Pods may have different resouce requirements and the nodes may have differnt config
+
+When a pod needs to be assigned to a node, the scheduler goes through 2 phases
+1. The first is filtering; it filters out all the nodes that don't have the necessary resouces to run the pod (the pod may require more CPU that what the node has)
+
+2. The sheduler then ranks the remaining nodes using a priority function to rank the nodes with a score 0-10. It calculates how many resouces will be remaining on the nodes when the pod is placed on them. If one were to have more CPU available after the pod is placed on it than the other would have then the node is given a better rank and the pod is placed on it

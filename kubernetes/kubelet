@@ -1,0 +1,1 @@
+The kubelet on the worker node, registers the node to the cluster. When it receives instructions to load a container on the node, it requests the container runtime engine (docker) to pull the image and run an instance. The kubelet monitors the pod and reports the the api-server on a timely basis
