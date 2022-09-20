@@ -1,0 +1,2 @@
+kubectl set image replicaset/new-replica-set busybox-container=busybox
+Updates the image of the container busybox-container within the replicaset new-replica-set to use the image 'busybox'
