@@ -1,9 +1,9 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: nginx-app-service
+  name: mynginx-service
   labels:
-    type: nginx-deployment
+    type: nginx-service
 spec:
   type: NodePort
   ports:
