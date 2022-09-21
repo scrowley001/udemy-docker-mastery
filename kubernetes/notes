@@ -1,0 +1,29 @@
+Taints and Tolerations
+Tainting a node means no pod can be placed on that node unless it has been given a toleration in its definition.
+There are 3 taint effects:
+NoSchedule: no pods will be placed on the node
+PreferedNoSchedule: it will try and avoid placing a pod on a node but its not guaranteed
+NoExecute: no pods will be placed on teh node, and any existing pods will be removed
+
+Just because a pod has a toleration, does not mean that pod will be scheduled on the node with a taint. It might be placed on a node that doesn't have a taint. If you need a pod to be on a particular node then this is the purpose of node affinity. 
+Tains are automatically placed on master nodes when created to prevent any pods being placed on them by default
+
+To taint a node = k taint node node01 spray=mortein:NoSchedule
+To untaint a node = k taint node node01 spray:NoSchedule-
+To setup a toleration in a yaml file:
+tolerations:
+- key: "key1"
+  operator: "Equal"
+  value: "value1"
+  effect: "NoSchedule"
+
+Annotations
+Similar to labels but these are not used to group items. They are there purely for any extra info you would like to place on the item, e.g. build_version, phone number, git sha etc
+
+Manual scheduling:
+in your pod.yaml file you could have something like 'nodeName: node1' under the pod spec. This will look for a node with that name
+
+Node selector:
+similar to manual scheduling above, only this time you have something similar to below, only this works off of labels on the node and not the node name
+'nodeSelector:
+  size: Large'
