@@ -17,6 +17,20 @@ tolerations:
   value: "value1"
   effect: "NoSchedule"
 
+Affinity
+To assign pods to nodes based on labels. Allows you to be more specific than nodeSelctor
+affinity:
+    nodeAffinity:
+           requiredDuringSchedulingIgnoredDuringExecution:
+                nodeSelectorTerms:
+                    - matchExpressions:
+                        - key: kubernetes.io/hostname
+                          operator: In
+                          values:
+                         -  minikube
+
+(lecture 64) If you have a scenario where you only want you pods on certain nodes and another team only want their pods on their own nodes, then you could use a both taint/tolerations and node affinity
+
 Annotations
 Similar to labels but these are not used to group items. They are there purely for any extra info you would like to place on the item, e.g. build_version, phone number, git sha etc
 
