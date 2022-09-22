@@ -18,7 +18,7 @@ tolerations:
   effect: "NoSchedule"
 
 Affinity
-To assign pods to nodes based on labels. Allows you to be more specific than nodeSelctor
+To assign pods to nodes based on labels. Allows you to be more specific than nodeSelctor. The below example comes under the spec in the pod definition.
 affinity:
     nodeAffinity:
            requiredDuringSchedulingIgnoredDuringExecution:
@@ -41,3 +41,13 @@ Node selector:
 similar to manual scheduling above, only this time you have something similar to below, only this works off of labels on the node and not the node name
 'nodeSelector:
   size: Large'
+
+Resource limits (managed by the scheduler):
+Kubernetes sets resource limits on containers; for CPU this default is 0.5CPU; for memory the default is 256Mi. However these defaults only apply if you have set a LimitRange in the namespace - https://kubernetes.io/docs/tasks/administer-cluster/manage-resources/memory-default-namespace/
+
+requests vs limits:
+ requests: If you request 1Gi of memory and 1CPU, then it will look for a node that has these available. If no node can handle the request, the pods events will show an error that the node didn't have enough CPU/memory
+ limits: in docker, containers can keep consuming resources on the node without ever hitting a limit and this can cause the node to crash. I kubernetes, you can limit this. You can set a limit for CPU and memory. CPU is blocked at the limit you set, but memory can still excede its limit. But if a pod is always trying to use more memory than its limit, the pod will be teminated
+
+Daemon sets:
+Runs one copy of your pod on each node in the cluster. Yaml file is almost identical to a RS but the kind is DaemonSet
