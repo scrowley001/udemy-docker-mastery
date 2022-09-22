@@ -51,3 +51,11 @@ requests vs limits:
 
 Daemon sets:
 Runs one copy of your pod on each node in the cluster. Yaml file is almost identical to a RS but the kind is DaemonSet
+
+Static pods:
+if you had no api-server, scheduler or even master nodes you can still provision pods on worker nodes. To do this you would upload you yaml file directly on the node in '/etc/kubernetes/manifests. The kubelet periodically reads the files here and will create a pod if it sees a pod.yaml file or will destroy it if the file is removed. You can only do this with pods; not deployments/rs/services.
+
+static pods have the node name appended to the end of the pod name. pods from the api-server pods have a random string at the end
+(leacture 73) kubernetes can take care of both static pods and those created by the api-server. If a static pod is created a mirror copy will be sent to the api-server so you can see it when running a 'k get pods'; however you can't edit this as its a read-only copy. You would need to edit the manifest file
+
+the file for the kubelet config is '/var/lib/kubelet/config.yaml'. This will tell you where all static pod manifests are stored under the key 'staticPodPath'. You may have static pods on different nodes, so its important to check what node a pod is on, then get onto that node and then find its manifest file if you need to make changes
