@@ -1,0 +1,9 @@
+The below will update the image but not the deployment file
+k set image deployment/my-deployment \
+   nginx=nginx:1.9.1
+
+k create deployment new-deployment --image=nginx --dry-run -o yaml > my-deploy.yaml
+
+k rollout status deployment/new-deployment
+k rollout history deployment/new-deployment
+k rollout undo deployment/new-deployment
