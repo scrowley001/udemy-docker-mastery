@@ -1,0 +1,5 @@
+To replace a running pod run:
+k replace --force -f <file_name>
+
+if you try and edit a live pod it won't work but will save a template in the /tmp dir. You can then run the replace command with this file:
+k replace --force -f /tmp/kubectl-edit-1234567.yaml

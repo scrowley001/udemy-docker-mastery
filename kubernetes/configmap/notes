@@ -1,0 +1,12 @@
+When you have a lot of pod definition files it can become complicated to manage the env specific data stored in the various files. You can take this out of the pod definition files and manage it centrally in the configmaps
+
+spec:
+  containers:
+    - name: nginx
+      image: nginx
+      - envFrom:
+	- configMapRef:
+	    name: <configmap_name>
+
+k create configmap \
+  <configmap-name> --from-literal=ENV_VAR_NAME=env_var_value
