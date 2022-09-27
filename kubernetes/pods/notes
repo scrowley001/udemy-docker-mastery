@@ -1,0 +1,8 @@
+ENTRYPOINT:
+(lecture 95) entrypoint is like a default command that will always run whenever the container is run. Anything you pass via the commandline will be appended to this entrypoint. If you wanted to overwrite the command then use the --entrypoint flag in your command
+
+If you also wanted it to have a default value, then use a mixture of ENTRYPOINT and CMD in your Dockerfile, where CMD would provide to default to ENTRYPOINT CMD vs ENTRYPOINT
+CMD: any command passed via the commandline will replace the CMD entrirely. ENTRYPOINT: any command passed via the command line will be appended
+
+'command:' in kubernetes yaml file is equivalent to 'ENTRYPOINT' in Dockerfile
+'args:' in kubernetes yaml file is equivalent to 'CMD' in Dockerfile 
