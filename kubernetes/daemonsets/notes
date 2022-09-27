@@ -1,0 +1,2 @@
+Daemon sets:
+Runs one copy of your pod on each node in the cluster. Yaml file is almost identical to a RS but the kind is DaemonSet

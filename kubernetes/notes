@@ -49,7 +49,7 @@ requests vs limits:
  requests: If you request 1Gi of memory and 1CPU, then it will look for a node that has these available. If no node can handle the request, the pods events will show an error that the node didn't have enough CPU/memory
  limits: in docker, containers can keep consuming resources on the node without ever hitting a limit and this can cause the node to crash. I kubernetes, you can limit this. You can set a limit for CPU and memory. CPU is blocked at the limit you set, but memory can still excede its limit. But if a pod is always trying to use more memory than its limit, the pod will be teminated
 
-Daemon sets:
+DaemonSets:
 Runs one copy of your pod on each node in the cluster. Yaml file is almost identical to a RS but the kind is DaemonSet
 
 Static pods:
