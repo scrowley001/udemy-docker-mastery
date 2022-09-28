@@ -4,7 +4,7 @@ spec:
   containers:
     - name: nginx
       image: nginx
-      - envFrom:
+      envFrom:
 	- configMapRef:
 	    name: <configmap_name>
 
