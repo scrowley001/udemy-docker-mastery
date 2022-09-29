@@ -1,0 +1,22 @@
+Below command looks for image locally. If it can't it will search dockerhub, create a container of that image. It will open port 80 (left number) on the host and forward the traffic to port 80 (right) inside the container. detach runs it in the background
+	docker container run --publish 80:80 --detach nginx
+
+each time you run 'docker container run <image>' it will start a new container from that image
+
+docker container run --publish 80:80 --detach -name webhost nginx	
+
+docker container run -it --name ubuntu ubuntu  === to run a shell inside a new container
+docker container start -ai ubuntu === to start an existing container and enter into the shell
+
+when running a new container with the -it flag, this overwrites the default startup command and will instead give you a shell into the container. But if you wanted to see the shell inside a container that was already running something like mysql or nginx; then you could use 'docker container exec'
+docker network create my_new_network
+docker container run -d --name new_nginx --network my_new_network nginx
+docker network inspect my_new_network
+
+docker container run -d -it --name ubuntu centos:7 bash
+
+docker container run -d -it --name centos centos:7 bash
+docker container exec ubuntu curl --version OR docker container exec -it ubuntu sh
+
+# This will give you a shell inside a new container but once you exit, the container will be destroyed
+docker container run --rm -it ubuntu:14.04 bash
