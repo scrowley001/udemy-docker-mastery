@@ -9,7 +9,18 @@ spec:
     command: ["sleep"]
     args: ["5000"]
 
-#alternative
+# alternative
+apiVersion: v1
+kind: Pod 
+metadata:
+  name: ubuntu-sleeper-2
+spec:
+  containers:
+  - name: ubuntu
+    image: ubuntu
+    command: ["sleep", "5000"]
+
+# alternative
 apiVersion: v1 
 kind: Pod 
 metadata:

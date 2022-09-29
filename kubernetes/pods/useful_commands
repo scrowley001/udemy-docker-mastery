@@ -3,3 +3,6 @@ k replace --force -f <file_name>
 
 if you try and edit a live pod it won't work but will save a template in the /tmp dir. You can then run the replace command with this file:
 k replace --force -f /tmp/kubectl-edit-1234567.yaml
+
+You can exec onto a pod and see the exact logs your are looking for if needed
+k exec app -n elastic-stack -it -- cat /log/app.log
