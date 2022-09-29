@@ -1,0 +1,14 @@
+pod eviction notice (controller-manager)
+Occasionlly you will need to update your nodes and take them offline
+If a pod is offline for the period specified time (default 5 mins) in the eviction notice, the master node will mark it unhealthy and recreate the pods on other nodes if part of a rs. If the node comes back before the eviction notice expires, the pods will start serving traffic again 
+
+A safer option is to drain and cordon the nodes. Draining terminates the pods & recreates them on another node. Cordoning means the updating node will have no new pods placed on it, until you have finished upgrading and uncordon the node
+k drain <node-name>  (this also cordons the node)
+k cordon <node-name>
+k uncordon <node-name>
+
+Upgrading cluster:
+Components can be on different versions (kubelet, api-server, scheduler, proxy) but they should not exceed the version set by the api-server. Controller-manager and scheduler can be one version lower and kubelet and proxy can be 2 versions lower. However, kubectl can be one version higher to allow us to carry out upgrades.
+
+It is recommended to upgrade one minor version at a time. Upgrade the master nodes first and then the worker nodes. 
+Note: when upgrading master nodes, your apps will continue to run but you cannot perform any management functions and you cannot interact with the cluster via the api. Controller manager also doesn't work so if a pod goes down a new one will not be scheduled
