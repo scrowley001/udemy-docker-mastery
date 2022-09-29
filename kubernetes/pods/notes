@@ -6,3 +6,29 @@ CMD: any command passed via the commandline will replace the CMD entrirely. ENTR
 
 'command:' in kubernetes yaml file is equivalent to 'ENTRYPOINT' in Dockerfile
 'args:' in kubernetes yaml file is equivalent to 'CMD' in Dockerfile 
+
+Multi container pods:
+You may want multiple containers to scale together but you don't want to merge the code of them together into one as each has different functionalities. For example if you had a logging agent with an application, you would want both to scale. Both containers are expected to stay alive at all times; if one dies then the pod is replaced
+
+Init containers:
+You may want to run a process that runs to completion in a container. For example a process that pulls code or binary from a repository that will be used by the main web application. When a POD is first created the initContainer is run, and the process in the initContainer must run to a completion before the real container hosting the application starts.
+
+example:
+apiVersion: v1
+kind: Pod
+metadata:
+  name: myapp-pod
+  labels:
+    app: myapp
+spec:
+  containers:
+  - name: myapp-container
+    image: busybox:1.28
+    command: ['sh', '-c', 'echo The app is running! && sleep 3600']
+  initContainers:
+  - name: init-myservice
+    image: busybox
+    command: ['sh', '-c', 'git clone <some-repository-that-will-be-used-by-application> ; done;']
+
+Logs for a particular container inside a pod
+k logs <pod> -c <container-name>
