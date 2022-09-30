@@ -1,0 +1,17 @@
+(lecture 128)
+There are many ways to take backups of your cluster. One way is to snapshot your etcd cluster as this contains all the info on the current state of the cluster
+<etcdctl snapshot save snapshot.db>
+<etcdctl snapshot status snapshot.db>
+
+To restore from a snapshot:
+1. stop the kube-apisever <service kube-apiserver stop>. This is needed bc your need to restart the etcd cluster and the api-server depends on it
+2. restore with <etcdctl snapshot restore snapshot.db --data-dir /var/lib/from-backup>. When etcd restores from a backup, it initilizes a new cluster configuration it configures the members of etcd as new members to a new cluster. This is to prevent a new member from joining an existing cluster. A new data dir is created (/var/lib/from-backup)
+3. Then configure the etcd config file to use this new data dir (/var/lib/from-backup)
+4. Reload the service-daemon <systemctl daemon-reload>
+5. Reload the service <service etcd restart>
+6. Finally, restart api-service <service kube-apiserver start>
+
+The above is all assuming you have access to the etcd cluster (which you wont if its EKS for example)
+
+Alternative is to backup everything to a yaml file:
+<kubectl get all --all-namespaces -o yaml > all-resources.yaml>
