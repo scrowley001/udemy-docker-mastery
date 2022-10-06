@@ -1,0 +1,20 @@
+etcdctl --endpoints  10.58.28.3:2379 \
+  --cert=/etc/etcd/pki/etcd.pem \
+  --key=/etc/etcd/pki/etcd-key.pem \
+  --cacert=/etc/etcd/pki/ca.pem \
+  member list
+-- on external etcd server when running as external service
+
+q 14
+etcdctl snapshot save /opt/cluster1.db \
+  --cert=/etc/kubernetes/pki/etcd/server.crt \
+  --key=/etc/kubernetes/pki/etcd/server.key \
+  --cacert=/etc/kubernetes/pki/etcd/ca.crt
+  --endpoints=https://10.1.220.8:2379
+-- on master node
+
+etcdctl snapshot restore /opt/cluster2.db \
+  --cacert=/etc/etcd/pki/ca.pem \
+  --endpoints=https://10.58.28.3:2379 \
+  --cert=/etc/etcd/pki/etcd.pem \
+  --key=/etc/etcd/pki/etcd-key.pem
