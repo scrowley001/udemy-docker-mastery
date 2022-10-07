@@ -1,0 +1,8 @@
+(lecture 156) If you try and access the API directly with: 'curl http://localhost:6443 -k' you will be forbidden because you have not specified any authentication methods. You need to authenticate to the api by passing in your certificate files and keys with the above command
+
+Or to avoid doing this you can run 'kubectl proxy'. This launches a kubectl proxy service on port 8001 and uses creds and certs from your kubeconfig file to access the cluster so you don'tt need to specify them in the curl command.
+Now you can access the proxy with 'curl http://localhost:8001 -k' which will forward your request and credentials from kubeconfig to the API server.
+
+kube proxy != kubectl proxy
+kube proxy is used to enable connectivity between pods and services across different nodes in the cluster
+kubectl proxy is a proxy service that is used to access the kube api-server

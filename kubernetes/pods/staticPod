@@ -1,0 +1,3 @@
+To see where the manifests are stored for static pods check /var/lib/kubelet/config.yaml at the key staticPodPath. Usually they are stored in /etc/kubernetes/manifests/
+
+

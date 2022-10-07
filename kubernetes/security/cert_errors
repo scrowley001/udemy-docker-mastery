@@ -1,0 +1,4 @@
+If there is an error on the api-server logs of something like:
+W1005 14:39:05.766232       1 clientconn.go:1331] [core] grpc: addrConn.createTransport failed to connect to {127.0.0.1:2379 127.0.0.1 <nil> 0 <nil>}. Err: connection error: desc = "transport: authentication handshake failed: x509: certificate signed by unknown authority". Reconnecting...
+
+then it means it can't connect to the etcd server. Check the api-server yaml manifest at /etc/kubernetes/manifests/kube-apiserver.yaml and make sure the etcd-cafile and etcd-certfile both point to the right locations which should be something like /etc/kubernetes/pki/ca.crt and /etc/kubernetes/pki/apiserver-etcd-client.crt respectfully

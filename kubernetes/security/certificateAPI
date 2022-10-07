@@ -1,0 +1,29 @@
+When talking about the CA server, this is actually just a pair of key and cert files we have generated. Whoever can access them can sign any requests for the kubernetes environment. The files should be stored on a secure server (which becomes the CA server). To sign a cert, you need to login to this server and sign them manually.
+
+The certificate API means that admins of cluster no longer need to sign requests manually. With the API you can send a cert signing request directly to kubernetes. Now when the admin receives the request, instead of logging into the master node and signing the cert themselves, they create a kubernetes object called 'certificateSigningRequest'. Once created all cert signing requests can be seen by all admins of the cluster. These can then be reviewed and approved easily
+
+All certificate operations are carried out by the controller manager
+
+Steps to use Certificate API
+1. User creates a key <openssl genrsa-out sean.key 2048>
+2. Generate a cert signing request using the key with her name on it <openssl req -new -key sean.key -subj "/CN=sean" -out sean.csr> and sends this request to the admin
+3. Admin then creates a cert signing object using the key.
+
+example:
+apiVersion: certificates.k8s.io/v1
+kind: CertificateSigningRequest
+metadata:
+  name: sean
+spec:
+  groups:
+    - system:authenticated
+  usages:
+    - digital signature
+    - key encipherment
+    - server auth
+   request:
+      < base64 encoded string of request>
+
+4. Create object. Then all requests can be viewed with 'k get csr' and approved with 'k certificate approve sean'
+5. Kubernetes signs the cert using its CA keys pairs and generates a cert for the user
+6. To view cert run: 'k get csr sean -o yaml' and then decode it from base64 output. This can then be shared with the user

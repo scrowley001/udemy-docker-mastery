@@ -1,0 +1,19 @@
+Certificates are used to guarantee trust between two parties. When a user tries to access a web server. TLS certs ensure the communication is encrypted and the server is who it says it is
+
+symmetric encryption: when the same key is used to encrypt and decrypt the data. A hacked listening on the network would be able to get the key as its sent over the network and they would be able to decrypt your data
+asymmetric enryption: uses private and public keys. This is how https connections work
+
+you cannot encyrypt data with the same key. You can encrypt with the public key and decrypt with the private or visa versa. So its important to remember, if you encrypt data with your private key, anyone with your public key can decrypt the data
+
+- When a user makes a https request to a server, he gets the openssl public key from the server. (a hacker sniffing the network would also get this)
+- The users browser then generates and encrypts a symmetric key with the public key provided by the server. This is then sent to the server (hacker would also get this)
+- The server then uses its openssl private key to decrypt the message and retrieve the symmetric key from it. (As the hacker does not have the private key, he cannot decrypt it the message)
+- The symmetric key is now only with the user and the server. They can now use this key to encrypt and decrypt data sent to each other.
+
+The entire infrastructure of certificate authority (CA), people, servers, and the process of generating, distributing and mainting digital certs is known as public key infrastructure (PKI).
+
+To inspect a certificate run:
+openssl x509 -in /etc/kubernetes/pki/apiserver.crt -text -noout
+the file path above can be gotten from describing the pod
+
+root ca certificates are stored at /etc/kubernetes/pki/ca.crt - run the open ssl command to inspect it

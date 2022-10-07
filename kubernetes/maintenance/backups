@@ -1,7 +1,17 @@
 (lecture 128)
 There are many ways to take backups of your cluster. One way is to snapshot your etcd cluster as this contains all the info on the current state of the cluster
 <etcdctl snapshot save snapshot.db>
+
+EXAMPLE: 
+export ETCDCTL_API=3
+etcdctl snapshot save /opt/snapshot-pre-boot.db (file path to save snapshot)\
+--cacert=/etc/kubernetes/pki/etcd/ca.crt \
+--cert=/etc/kubernetes/pki/etcd/server.crt \
+--endpoints=https://127.0.0.1:2379 \
+--key=/etc/kubernetes/pki/etcd/server.key
+
 <etcdctl snapshot status snapshot.db>
+etcdctl snapshot status /opt/snapshot-pre-boot.db
 
 To restore from a snapshot:
 1. stop the kube-apisever <service kube-apiserver stop>. This is needed bc your need to restart the etcd cluster and the api-server depends on it
@@ -10,6 +20,11 @@ To restore from a snapshot:
 4. Reload the service-daemon <systemctl daemon-reload>
 5. Reload the service <service etcd restart>
 6. Finally, restart api-service <service kube-apiserver start>
+
+If managing via kubeadm where the pods are static, you won't need to stop and restart the services. Just edit the etcd pod and change the etcd location to the new one you specified in your restore command with '--data-dir'. Do this under:
+volumes:
+ -hostPath:
+   path: /var/lib/<old etcd config file>
 
 The above is all assuming you have access to the etcd cluster (which you wont if its EKS for example)
 

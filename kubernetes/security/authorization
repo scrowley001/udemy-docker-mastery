@@ -1,0 +1,39 @@
+(lecture 158)
+If you want to see what authorization methods are enabled, describe the apiserver pod and look for --authorization-methods
+
+Types of authorization:
+Node
+ABAC (attribute based authorization)
+RBAC (role based authorization)
+Webhook (using third party tools for authorization)
+Always allow (allows all requests without performing any authorization requests)
+Always deny (denies all requests without performing any authorization requests)
+
+RBAC is the easiest to manage for users:
+
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: developer
+rules:
+  - apiGroups: [""]
+    resources: ["pods"]
+    verbs: ["list", "get", "create", "update", "delete"]
+    resourceNames: ["test-pod", "test-pod-2"] # will restrict access to certain pods
+  - apiGroups: [""]
+    resources: ["ConfigMap"]
+    verbs: ["create"]
+
+
+
+If you want to see what you can perform run:
+'k auth can-i create pods'
+
+If you are an admin and want to test other users access, you don't need to authenticate as the user
+'k auth can-i create pods --as dev-user --namespace test'
+
+THESE ABOVE ROLES ARE ALL NAMESPACED, MEANING THEY ROLES ONLY PROVIDE ACCESS TO THINGS WITHIN THEIR NAMESPACE
+
+To provide access to resources at a cluster level use ClusterRoles and ClusterRoleBindings
+
+You can create a cluster role for namespaced resources. This will provide the user will have access to the provided resources in all namespaces
