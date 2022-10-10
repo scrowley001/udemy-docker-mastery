@@ -1,0 +1,30 @@
+You can configure security at the container level or the pod level. If at a pod level, the settings will carry over to all containers on the pod. If you configure it at both, the settings on the container will overwrite those of the pod
+
+The below will configure it at the pod level
+apiVersion: v1
+kind: Pod
+metadata:
+  name: web-app
+spec:
+  securityContext:
+    runAsUser: 1000
+  containers:
+    - name: ubuntu
+      image: ubuntu
+      command: ["sleep", "1000"]
+
+The below will configure it at the container level
+Capabilities are only supported on the container level and not the pod level
+apiVersion: v1
+kind: Pod
+metadata:
+  name: web-app
+spec:
+  containers:
+    - name: ubuntu
+      image: ubuntu
+      command: ["sleep", "1000"]
+        securityContext:
+          runAsUser: 1000
+          capabilities:
+	    add: ["MAC_ADMIN"]

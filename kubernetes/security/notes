@@ -1,0 +1,8 @@
+By default Docker runs a container with a limited set of capabilities and so the proccesses running in the container don't have the rights to interfere with the host or other containers running on the host. You can override this with the --cap-add or --cap-drow command:
+docker run --cap-add MAC_ADMIN ubuntu
+docker run --cap-drop MAC_ADMIN ubuntu
+
+Or to run the container with all privilages enabled use:
+docker run --privileged ubuntu
+
+pod_security.yml has example in kubernetes
