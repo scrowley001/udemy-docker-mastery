@@ -1,0 +1,24 @@
+When you create a container from an image, the image is readonly. You cannot modify any files directly on the image. You would need to create a new image if you wished to change the files.
+
+Copy-on-write is a strategy used to increase efficiency. If a file or directory exists in the image and another layer (including the writable layer) needs access to it, it just uses the existing file. The first time another layer needs to modify the file, the file is copied into that layer and modified. This minimizes I/O and the size of each subsequent layer
+
+If you delete the container then all the data in the container is also deleted
+
+Volumes:
+To persist data, you need to use a docker volume
+
+There are two types of mounting. Volume mounting and bind mounting
+volume mount: mounts a volume from the default location on the docker host (/var/lib/docker/volumes/<volume-name>
+bind mount: mounts a volume from any directory on the docker host
+
+If you try and create a container with a volume that doesn't exist, docker will automatically create the volume and mount it to the container
+docker run -v data_volume:/var/lib/mysql mysql
+This will create the container 'data_volume' and mount it to this new container. The above command is a 'volume mount'
+
+docker run -v /data/mysql:/var/lib/mysql mysql
+This is a bind mounting and will mount the folder /data to /var/lib/mysql 
+
+The above commands are the old format. This is the new way:
+docker run \
+  --mount type=bind, source=/data/mysql, target=/var/lib/mysql mysql
+
