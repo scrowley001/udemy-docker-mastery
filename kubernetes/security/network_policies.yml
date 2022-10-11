@@ -1,27 +1,43 @@
-In the below example only ingress traffic is restricted. If you want to restrict egress then add this under policyTypes
+In the below example only ingress traffic is restricted. 
+Once you allow incoming traffic, the response is automatically allowed back; you don't need another rule for it.
+
+By default this policy will only pods in the same namespace (prod). If you wanted to allow pods from another namespace then include 'namespaceSelector'. Wih the matchLabels, you would need to have those labels on the namespace for it to work
+
+'ipBlock' provides access for servers that may be outside your cluster, e.g. 172.17.0.0/16
+
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
-  name: test-network-policy
-  namespace: default
+  name: prod-network-policy
+  namespace: prod
 spec:
   podSelector:
     matchLabels:
       role: db
   policyTypes:
     - Ingress
+    - Egress
   ingress:
     - from:
+	  # podSelector and namespaceSelector are part of the same item below; So both of these must be true for it to be allowed OR the ipBlock must match the approved cidr range
+        - podSelector:
+            matchLabels:
+              role: api-pod
+          namespaceSelector:
+            matchLabels:
+              project: nonprod
         - ipBlock:
             cidr: 172.17.0.0/16
             except:
               - 172.17.1.0/24
-        - namespaceSelector:
-            matchLabels:
-              project: myproject
-        - podSelector:
-            matchLabels:
-              role: frontend
       ports:
         - protocol: TCP
-          port: 6379
+          port: 3306
+# You may want to backup your DB to an external server; in this case you would need to allow egress traffic to the cidr range of your server
+  egress:
+    - to:
+        - ipBlock:
+            cidr: 192.168.5.0/32
+      ports:
+        - protocol: TCP
+          port: 80
