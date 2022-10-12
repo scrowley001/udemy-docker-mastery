@@ -1,0 +1,43 @@
+Persistent volumes mean that you don't have to define a volume in each pod definition file. You create a persistent volume and pods get a section of that vol through a 'persistent volume claim'
+
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pv-vol1
+spec:
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: /tmp/data
+  capacity:
+    storage: 5Gi
+
+This PVC only looks for 1Gi but the volume has 5Gi. Since there are no other volumes available, the PVC is bound to the PV 
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: myclaim
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+
+
+Once a PVC has been created you can then use this in a pod definiton file. The same can be done for deployments and replicasets
+apiVersion: v1
+kind: Pod
+metadata:
+  name: mypod
+spec:
+  containers:
+    - name: myfrontend
+      image: nginx
+      volumeMounts:
+      - mountPath: "/var/www/html"
+        name: mypd
+  volumes:
+    - name: mypd
+      persistentVolumeClaim:
+        claimName: myclaim
