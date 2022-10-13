@@ -1,0 +1,20 @@
+Static Provisioning:
+The problem with persistent volumes when working with a cloud provider, is that the volume (AWS EBS, Google disk) has to exist in the cloud provider before you create the PV.
+
+Dynamic Provisioning:
+You can define a provisioner such as Google storage that can automatically provider storage and attach it to pods when a claim is made
+
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: google-storage
+provisioner: kubernetes.io/gce-pd
+parameters:
+  type: pd-standard
+  replication-type: none
+
+The parameters will change depending on the cloud provider used. AWS examle - https://kubernetes.io/docs/concepts/storage/storage-classes/#aws-ebs
+The above is all we need instead of a PV. Then we just specify the 'StorageClassName', i.e. 'google-storage' in the PVC def file
+
+When a PVC is created the SC associated with it uses the defined provisioner to create a new disk with required size on GCP; Then creates a PV and binds the PVC to that volume
+Note: it still creates a PV, you just don't need to manually create the PV anymore

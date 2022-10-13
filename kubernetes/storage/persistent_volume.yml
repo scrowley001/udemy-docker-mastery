@@ -1,4 +1,10 @@
+With regular volumes, in each pod def file, you need to create a vol and specify what size it should be. PV simplifies this
+A PV is a cluster wide volume
+Every PV is bound to a single PVC. During the binding process, k tries to find a PV that has sufficient capacity to satisfy the claim and any other request properties such as access mode, volume modes and storage class
+If there are multiple matches, you can use labels (on the PV) and selectors (on the PVC) to define which claim should bind to which PV
 Persistent volumes mean that you don't have to define a volume in each pod definition file. You create a persistent volume and pods get a section of that vol through a 'persistent volume claim'
+A smaller PVC may attach to a larger PV if the other criteria match and there is no better option. Its a 1:1 relationship so no other claim can utilise the remaining space left on the larger PV
+If there are no PV's available the PVC will remain in a pending state
 
 apiVersion: v1
 kind: PersistentVolume
@@ -9,6 +15,20 @@ spec:
     - ReadWriteOnce
   hostPath:
     path: /tmp/data
+  capacity:
+    storage: 5Gi
+OR
+
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pv-vol1
+spec:
+  accessModes:
+    - ReadWriteOnce
+  gcePersistentDisk:
+    pdName: pd-disk
+    fsType: ext4
   capacity:
     storage: 5Gi
 
@@ -36,7 +56,7 @@ spec:
       image: nginx
       volumeMounts:
       - mountPath: "/var/www/html"
-        name: mypd
+        name: data-volume
   volumes:
     - name: mypd
       persistentVolumeClaim:
