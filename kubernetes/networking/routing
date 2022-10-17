@@ -1,0 +1,10 @@
+(lecture 198)
+'route'  command shows your routing config
+
+Kernel IP routing table
+Destination     Gateway         Genmask         Flags Metric Ref    Use Iface
+default         DESKTOP-2TJA4QI 0.0.0.0         UG    0      0        0 eth0
+172.27.32.0     0.0.0.0         255.255.240.0   U     0      0        0 eth0
+
+Destination = default: Any request your computer doesn't know the route should use the router as the default gateway
+Gateway = 0.0.0.0: means you don't need to use a gateway because its in its own network

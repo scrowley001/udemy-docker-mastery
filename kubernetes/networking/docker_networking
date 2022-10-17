@@ -1,0 +1,3 @@
+Every time a container is created, Docker creates a namspace, creates a pair of interfaces and attaches one to the container and one to the bridge network.
+
+

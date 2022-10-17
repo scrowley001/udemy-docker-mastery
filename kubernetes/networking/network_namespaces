@@ -1,0 +1,8 @@
+To isolate the networking capabilities of containers create a network namespace
+	'ip netns add <name>'
+To list them just run 'ip netns'
+
+To list the interfaces on a linux host run 'ip link'. To list the interfaces in a network namespace run:
+	'ip netns exec <namespace> ip link' or 'ip -n <namespace> link'
+
+

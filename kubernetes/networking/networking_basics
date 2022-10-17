@@ -1,0 +1,29 @@
+If you wanted to add a DNS name for a server on your network add the IP and DNS name into /etc/hosts, for example:
+
+  192.167.4.1    db
+
+If you try to ping 'db' it will resolve to that IP.
+This becomes challenging when you have a large number of servers as this file would become very large. If one IP changed you would need to change the IP on each host
+So to fix this, move all the entries into one single DNS server where they can all be managed centrally. Point all hosts to look at that server instead of its own /etc/hosts file
+Every host has a DNS resolution config file at /etc/resolve.conf. Add an entry specifying the address of the DNS server
+
+  nameserver     192.168.1.100
+
+The host machine will always check its own /etc/hosts file first. If it finds the entry it will use that; if not it will look on the DNS server
+But that order can be changed in the file '/etc/nsswitch.conf'. Look for the line like:
+
+  hosts:          files dns
+
+'files' refers to the local /etc/hosts file and 'dns' refers to the DNS server. Swap the order to first look at the DNS server and then at the local hosts file
+
+If you want to connect to something that is not in either file, then you can add another nameserver to /etc/hosts:
+  
+  nameserver      8.8.8.8
+
+This is a common public nameserver hosted by Google. But again you would need to add this to each host.
+Instead add an entry to your DNS server:
+
+  Forward ALL to 8.8.8.8
+
+
+'nslookup' and 'dig' only query the DNS server. They ignore your '/etc/hosts' file
