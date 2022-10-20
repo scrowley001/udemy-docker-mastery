@@ -1,0 +1,20 @@
+(lecture 222-223)
+
+How to resolve a service in a cluster:
+To access a pod its preferred to create a service. This service then maps to the pod and you can access the pod via the service name.
+If all pods are in the same namespace then to access another via a service just use 'curl http://service-name'. If they are in different namespaces then you need to use 'curl http://service-name.namespace'
+
+All pods and services within a namespace are grouped together in a subdomain in the name of the namespace; which is why it becomes 'curl http://service-name.namespace'
+All services are futher grouped into a subdomain called 'svc', so you can also reach you app with the name 'curl http://service-name.namespace.svc'
+All pods and services are grouped together in a root domain for the cluster, which by default is 'cluster.local', so you can reach the app via 'curl http://service-name.namespace.svc.cluster.local'. This is the fqdn of the service. You can check the root domain at '/etc/coredns/Corefile'. 
+
+How to resolve a pod in a cluster:
+Similar to above but records for pods are not created by default. To do this add 'pods insecure' under the kubernetes plugin inside '/etc/coredns/Corefile'
+The name is not the name of the pod; instead the IP is changed from dots to dashes, i.e. 10.0.2.3 becomes 10-0-2-3
+To resolve it now becomes similar to above only this time the type changes from 'svs' to 'pod'; 'curl http://10-0-2-3.namespace.pod.cluster.local'
+
+CoreDNS:
+coreDNS is now the recommended DNS solution for kubernetes. Its deployed as a service. The IP of this server is configured as the nameserver in /etc/resolve.conf on pods (done by the kubelet). You can see the IP of the DNS server if you run 'k get service -n kube-system' and look for 'kube-dns' or by checking the kubelet config file located at /var/lib/kubelet/config.yaml
+
+It watches the cluster and each time a pod or service is created it adds a record in its DB
+It adds multiple records for services, i.e. it will add <service_name>, <service_name.namespace> all the way to <service_name.namespace.type.root_domain>. This means you can resolve any of them
