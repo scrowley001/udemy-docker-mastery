@@ -1,0 +1,38 @@
+(lecture 226)
+Ingress allows you to manage all your loadbalancing, authentication, ssl and URL based routing config; without this, you would need to manage all these independently and that would be complex and expensive
+
+Ingress controllers:
+A set of pods on your cluster and does evaluation and processing of ingress rules that you have defined and manages redirections 
+
+Ingress resources:
+(min 14:30)
+
+
+When you have a deployment and you want to create a service you can either do it imperatively through kubectl:
+k create service nodeport ingress --node-port=30080 --tcp=80:80 -n ingress-space --dry-run=client -o yaml > service.yaml
+
+declartively:
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: null
+  labels:
+    app: ingress
+  name: ingress
+  namespace: ingress-space
+spec:
+  selector:
+          name: nginx-ingress
+  ports:
+  - name: ingress
+    nodePort: 30080
+    port: 80
+    protocol: TCP
+    targetPort: 80
+  type: NodePort
+
+Or by exposing the deployment with a command like:
+kubectl expose -n ingress-space deployment ingress-controller --type=NodePort --port=80 --name=ingress --dry-run=client -o yaml > ingress.yaml and manually add the given node port and
+
+Create an ingress:
+k create ingress ingress -n app-space --rule="/wear*"=wear-service:8080 --rule="/watch*"=video-service:8080
