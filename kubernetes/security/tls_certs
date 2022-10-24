@@ -1,19 +1,45 @@
 Certificates are used to guarantee trust between two parties. When a user tries to access a web server. TLS certs ensure the communication is encrypted and the server is who it says it is
 
 symmetric encryption: when the same key is used to encrypt and decrypt the data. A hacked listening on the network would be able to get the key as its sent over the network and they would be able to decrypt your data
-asymmetric enryption: uses private and public keys. This is how https connections work
+asymmetric enryption: uses a pair of private and public keys. This is how https connections work
 
-you cannot encyrypt data with the same key. You can encrypt with the public key and decrypt with the private or visa versa. So its important to remember, if you encrypt data with your private key, anyone with your public key can decrypt the data
 
-- When a user makes a https request to a server, he gets the openssl public key from the server. (a hacker sniffing the network would also get this)
-- The users browser then generates and encrypts a symmetric key with the public key provided by the server. This is then sent to the server (hacker would also get this)
+Knowing if connection is secure:
+In order for your website to show as secure when using https:
+- generate a CSR (cert signing request).
+- send this to a CA (cert authority)
+- they validate and sign the certificate proving that you are the actual owner of that domain
+
+To know that the CA is valid and not a fake CA:
+- the CA's have a set of public and private keys
+- they use their private keys to sign the certs
+- your browser has the public keys of the CA built in and uses this to validate that the cert was actually signed by the CA themselves
+
+You can also host your own private CA's (e.g. for payroll or other internal services). Many CA's have a private offering of their services for exactly this.
+- you deploy this private CA on a server internally with a public and private key
+- install the public key on all employee's browsers and establish secure connectivity within the organistation
+
+Complete overview of https connection:
+- Cert is sign and received as above with with the CA's private key. Web app is  then configured to use this cert
+- When a user makes a https request to a server, he gets the certificate with openssl public key from the server. (a hacker sniffing the network would also get this)
+- The users browser then uses the public key of the CA to validate the certificate and then generates a key (symmetric key) and encrypts it with the public key provided by the server. This is then sent to the server (hacker would also get this)
 - The server then uses its openssl private key to decrypt the message and retrieve the symmetric key from it. (As the hacker does not have the private key, he cannot decrypt it the message)
 - The symmetric key is now only with the user and the server. They can now use this key to encrypt and decrypt data sent to each other.
 
-The entire infrastructure of certificate authority (CA), people, servers, and the process of generating, distributing and mainting digital certs is known as public key infrastructure (PKI).
+
+The entire infrastructure of certificate authority (CA), people, servers, and the process of generating, distributing and mainting digital certs is known as public key infrastructure (PKI)
+
+You cannot encyrypt data with the same key. You can encrypt with the public key and decrypt with the private or visa versa. So its important to remember, if you encrypt data with your private key, anyone with your public key can decrypt the data
+
+Usually public key certificates end in:
+*.crt
+*.pem
+And private key certificates end in:
+*.key
+*-key.pem
 
 To inspect a certificate run:
 openssl x509 -in /etc/kubernetes/pki/apiserver.crt -text -noout
 the file path above can be gotten from describing the pod
 
-root ca certificates are stored at /etc/kubernetes/pki/ca.crt - run the open ssl command to inspect it
+root CA certificates are stored at /etc/kubernetes/pki/ca.crt - run the open ssl command to inspect it
