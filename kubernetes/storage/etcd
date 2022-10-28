@@ -1,0 +1,11 @@
+lecture 238
+If you are looking for a HA setup of your etcd cluster then you can have multiple etcd servers. However this will mean writing to etcd becomes more complicated. To avoid any issues a leader is elected
+
+Leader election happens as a result of the RAFT protocol. When a cluster is set up and there are multiple etcd servers, RAFT algorithm starts random timers on each etcd node. The first node who's timer completes will send out a request to the other nodes asking to become leader. The other nodes respond and then it becomes the leader.
+
+It sends out regular notifications that it is still assuming the role of leader. If they don't receive this notification at some time then the election process starts againIf a write comes to a leader node then it sends a copy to a worker. If it comes to any of the workers then the workers forward it to the leader who then processes it. 
+
+A write is only complete once it has been replicated to the MAJORITY of the nodes; so if there are 3 nodes and it writes to 2 then its considered successful (majority/quorum = n/2 + 1). This is why a minimum of 3 is recommended because quorum cannot be achieved with just 2 nodes as 2/2 + 1 = 2. 
+
+With 3 nodes you have a fault tolerance of 1 node. An odd number is recommended as if you have your nodes subnetted and they happen to be divided evenly in the subnets, then you cannot achieve quorum (9:00). If quorum is not achieved then the cluster is non-functional..
+

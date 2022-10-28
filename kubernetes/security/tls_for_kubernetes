@@ -1,0 +1,8 @@
+How to set up private keys and certificates for encryption between components:
+- on the private CA, create a private key. Then create a CSR. As this is for the CA itself this CSR will be self-signed
+- on the CA create an admin user key; create a CSR; and then sign it, but this time sign it with the key and cert you created above for the CA. For admins you also need to specify the O parameter with 'system:masters'
+- follow a similar process to create client certs for all components that access the kube-apiserver. For kube-scheduler, controller-manager and kube-proxy their name's must be prefixed with 'system:'
+- Note: whenever you configure a server or client, you also need to specify the CA route cert so that all components can verify each other
+
+lecture 144 - 7:14
+etcd can have its own CA. The etcd server and client certs (client server being on the api-server) will all be signed by the etcd server CA
